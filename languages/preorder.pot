@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-06-14T14:37:07+00:00\n"
+"POT-Creation-Date: 2026-06-14T21:56:19+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: preorder\n"
@@ -26,7 +26,7 @@ msgstr ""
 
 #. Description of the plugin
 #: preorder.php
-msgid "Let customers pre-order upcoming or out-of-stock products with a release date."
+msgid "Let customers pre-order upcoming or out-of-stock WooCommerce products with a custom add-to-cart button."
 msgstr ""
 
 #. Author of the plugin
@@ -44,8 +44,8 @@ msgid "Preorder - Pre-Orders for WooCommerce requires WooCommerce to be active."
 msgstr ""
 
 #: src/Admin/ProductDataPanel.php:32
-#: src/Service/PreorderService.php:201
-#: src/Service/PreorderService.php:223
+#: src/Service/PreorderService.php:148
+#: src/Service/PreorderService.php:170
 msgid "Pre-order"
 msgstr ""
 
@@ -53,31 +53,9 @@ msgstr ""
 msgid "Sell this product as a pre-order. It stays purchasable even when out of stock."
 msgstr ""
 
-#: src/Admin/ProductDataPanel.php:38
-msgid "Release date"
-msgstr ""
-
-#: src/Admin/ProductDataPanel.php:41
-msgid "Optional. Shown to shoppers as the estimated availability date."
-msgstr ""
-
-#: src/Admin/ProductDataPanel.php:49
-msgid "Button text"
-msgstr ""
-
-#: src/Admin/ProductDataPanel.php:51
-msgid "Optional. Overrides the global pre-order button label for this product."
-msgstr ""
-
-#: src/Admin/ProductDataPanel.php:52
-#: src/Admin/Settings.php:150
-#: src/Settings.php:55
-msgid "Pre-order now"
-msgstr ""
-
 #: src/Admin/Settings.php:45
 #: src/Admin/Settings.php:46
-#: src/Admin/Settings.php:100
+#: src/Admin/Settings.php:99
 msgid "Pre-orders"
 msgstr ""
 
@@ -85,67 +63,48 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: src/Admin/Settings.php:104
+#: src/Admin/Settings.php:103
 msgid "Settings saved."
 msgstr ""
 
-#: src/Admin/Settings.php:109
+#: src/Admin/Settings.php:108
 msgid "Mark individual products as pre-orders from the product editor (Product data → General). These options control the storefront defaults."
 msgstr ""
 
-#: src/Admin/Settings.php:120
+#: src/Admin/Settings.php:119
 msgid "Enable pre-orders"
 msgstr ""
 
-#: src/Admin/Settings.php:132
+#: src/Admin/Settings.php:131
 msgid "Apply pre-order behaviour on the storefront."
 msgstr ""
 
-#: src/Admin/Settings.php:135
+#: src/Admin/Settings.php:134
 msgid "When off, products flagged as pre-orders behave like normal products. Turn this off to pause pre-orders store-wide without editing each product."
 msgstr ""
 
-#: src/Admin/Settings.php:141
+#: src/Admin/Settings.php:140
 msgid "Default button text"
 msgstr ""
 
-#: src/Admin/Settings.php:154
+#: src/Admin/Settings.php:149
+#: src/Settings.php:50
+msgid "Pre-order now"
+msgstr ""
+
+#: src/Admin/Settings.php:153
 msgid "Add-to-cart label shown for pre-order products. Individual products can override this in the product editor."
 msgstr ""
 
 #: src/Admin/Settings.php:160
-msgid "Show release date"
-msgstr ""
-
-#: src/Admin/Settings.php:172
-msgid "Display the estimated release date to shoppers."
-msgstr ""
-
-#: src/Admin/Settings.php:175
-msgid "Shows the per-product release date on the product page and in the cart, when one is set."
-msgstr ""
-
-#: src/Admin/Settings.php:182
 msgid "Save changes"
 msgstr ""
 
-#: src/Admin/Settings.php:191
+#: src/Admin/Settings.php:169
 msgid "You do not have permission to manage these settings."
 msgstr ""
 
-#. translators: %s: human-readable release date.
-#: src/Service/PreorderService.php:145
-#, php-format
-msgid "Estimated release date: %s"
-msgstr ""
-
-#: src/Service/PreorderService.php:187
-#: src/Service/PreorderService.php:223
+#: src/Service/PreorderService.php:149
+#: src/Service/PreorderService.php:170
 msgid "Yes"
-msgstr ""
-
-#. translators: %s: human-readable release date.
-#: src/Service/PreorderService.php:194
-#, php-format
-msgid "Yes — ships around %s"
 msgstr ""

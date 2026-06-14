@@ -1,6 +1,6 @@
 {
     "name": "wppoland/preorder",
-    "description": "Let customers pre-order upcoming or out-of-stock products with a release date.",
+    "description": "Let customers pre-order upcoming or out-of-stock WooCommerce products with a custom add-to-cart button.",
     "type": "wordpress-plugin",
     "license": "GPL-2.0-or-later",
     "require": {

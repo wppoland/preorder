@@ -42,11 +42,6 @@ final class Settings
         return (bool) ($this->all()['enabled'] ?? true);
     }
 
-    public function showReleaseDate(): bool
-    {
-        return (bool) ($this->all()['show_release_date'] ?? true);
-    }
-
     public function defaultButtonText(): string
     {
         $text = (string) ($this->all()['default_button_text'] ?? '');

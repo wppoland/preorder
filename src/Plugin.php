@@ -39,8 +39,6 @@ final class Plugin
         }
         $this->booted = true;
 
-        $this->container->get(Migrator::class)->maybeMigrate();
-
         /** @var array<class-string<HasHooks>> $hooks */
         $hooks = require __DIR__ . '/../config/hooks.php';
         foreach ($hooks as $id) {
@@ -49,12 +47,5 @@ final class Plugin
                 $service->registerHooks();
             }
         }
-
-        /**
-         * Fires after the plugin has fully booted. Add-ons can hook here.
-         *
-         * @param Plugin $plugin The booted plugin instance.
-         */
-        do_action('preorder/booted', $this);
     }
 }

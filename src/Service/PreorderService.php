@@ -14,8 +14,8 @@ use Preorder\Settings;
  * Storefront behaviour for pre-order products.
  *
  * When a product is flagged as a pre-order it becomes purchasable even while out
- * of stock, the add-to-cart button label changes, a release-date notice is shown,
- * and the cart line + order line are flagged as pre-orders for fulfilment.
+ * of stock, the add-to-cart button label changes, and the cart line + order line
+ * are flagged as pre-orders for fulfilment.
  *
  * Everything degrades gracefully: if the plugin is globally disabled, the product
  * is not a pre-order, or WooCommerce data is missing, the methods short-circuit
@@ -23,8 +23,7 @@ use Preorder\Settings;
  */
 final class PreorderService implements HasHooks
 {
-    private const CART_FLAG    = 'preorder_is_preorder';
-    private const CART_RELEASE = 'preorder_release_date';
+    private const CART_FLAG = 'preorder_is_preorder';
 
     public function __construct(
         private readonly Settings $settings,
@@ -46,9 +45,6 @@ final class PreorderService implements HasHooks
         // Change the add-to-cart button label.
         add_filter('woocommerce_product_single_add_to_cart_text', [$this, 'filterButtonText'], 10, 2);
         add_filter('woocommerce_product_add_to_cart_text', [$this, 'filterButtonText'], 10, 2);
-
-        // Show the release-date notice on the single product page.
-        add_action('woocommerce_single_product_summary', [$this, 'renderReleaseNotice'], 11);
 
         // Flag the cart item, surface it in the cart/checkout, and copy to the order.
         add_filter('woocommerce_add_cart_item_data', [$this, 'addCartItemData'], 10, 3);
@@ -112,41 +108,7 @@ final class PreorderService implements HasHooks
             return $text;
         }
 
-        $override = $this->meta->buttonTextOverride($product);
-
-        return '' !== $override ? $override : $this->settings->defaultButtonText();
-    }
-
-    /**
-     * Render the release-date notice under the price on the single product page.
-     */
-    public function renderReleaseNotice(): void
-    {
-        if (! $this->settings->showReleaseDate()) {
-            return;
-        }
-
-        global $product;
-        if (! $this->applies($product)) {
-            return;
-        }
-
-        /** @var \WC_Product $product */
-        $display = $this->meta->releaseDateDisplay($product);
-        if ('' === $display) {
-            return;
-        }
-
-        printf(
-            '<p class="preorder-release-notice" role="note">%s</p>',
-            esc_html(
-                sprintf(
-                    /* translators: %s: human-readable release date. */
-                    __('Estimated release date: %s', 'preorder'),
-                    $display,
-                ),
-            ),
-        );
+        return $this->settings->defaultButtonText();
     }
 
     /**
@@ -164,9 +126,7 @@ final class PreorderService implements HasHooks
             return $cartItemData;
         }
 
-        /** @var \WC_Product $product */
-        $cartItemData[self::CART_FLAG]    = true;
-        $cartItemData[self::CART_RELEASE] = $this->meta->releaseDate($product);
+        $cartItemData[self::CART_FLAG] = true;
 
         return $cartItemData;
     }
@@ -184,22 +144,9 @@ final class PreorderService implements HasHooks
             return $itemData;
         }
 
-        $value = __('Yes', 'preorder');
-
-        if ($this->settings->showReleaseDate() && ! empty($cartItem[self::CART_RELEASE])) {
-            $timestamp = strtotime((string) $cartItem[self::CART_RELEASE] . ' 00:00:00 UTC');
-            if (false !== $timestamp) {
-                $value = sprintf(
-                    /* translators: %s: human-readable release date. */
-                    __('Yes — ships around %s', 'preorder'),
-                    wp_date((string) get_option('date_format', 'F j, Y'), $timestamp),
-                );
-            }
-        }
-
         $itemData[] = [
             'key'   => __('Pre-order', 'preorder'),
-            'value' => $value,
+            'value' => __('Yes', 'preorder'),
         ];
 
         return $itemData;
@@ -221,9 +168,5 @@ final class PreorderService implements HasHooks
         }
 
         $item->add_meta_data(__('Pre-order', 'preorder'), __('Yes', 'preorder'), true);
-
-        if (! empty($values[self::CART_RELEASE])) {
-            $item->add_meta_data('_preorder_release_date', (string) $values[self::CART_RELEASE], true);
-        }
     }
 }

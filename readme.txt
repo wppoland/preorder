@@ -1,6 +1,6 @@
 === Preorder - Pre-Orders for WooCommerce ===
 Contributors: wppoland
-Tags: woocommerce, preorder, pre-order, backorder, release date
+Tags: woocommerce, preorder, pre-order, backorder, out of stock
 Requires at least: 6.5
 Tested up to: 7.0
 Requires PHP: 8.1
@@ -9,7 +9,7 @@ Requires Plugins: woocommerce
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Let customers pre-order upcoming or out-of-stock WooCommerce products with a release date and a custom button label.
+Let customers pre-order upcoming or out-of-stock WooCommerce products with a custom add-to-cart button.
 
 == Description ==
 
@@ -19,18 +19,17 @@ its stock status is out of stock — so shoppers can reserve upcoming releases o
 restocks instead of bouncing.
 
 On the storefront, pre-order products get a custom add-to-cart label (for example
-"Pre-order now"), an optional estimated release-date notice, and a clear pre-order
-flag in the cart and on the order so you always know which lines are pre-orders.
+"Pre-order now") and a clear pre-order flag in the cart and on the order, so you
+always know which lines are pre-orders.
 
 = Features =
 
-* Mark any simple product as a pre-order from **Product data → General**.
-* Optional per-product release date, shown to shoppers as the estimated availability date.
-* Custom add-to-cart button label, globally or per product.
+* Mark any product as a pre-order from **Product data → General**.
+* Custom add-to-cart button label for pre-order products.
 * Pre-order products stay purchasable while out of stock.
-* Cart and checkout show a clear pre-order line with the release date.
+* Cart and checkout show a clear pre-order line.
 * Order line items are flagged as pre-orders (order item meta) for fulfilment.
-* A **WooCommerce → Pre-orders** settings screen: global on/off, default button text, show/hide release date.
+* A **WooCommerce → Pre-orders** settings screen: global on/off and default button text.
 * Output escaped, input sanitised, forms nonce-protected, admin gated on manage_woocommerce.
 * Translation ready (POT included) and clean uninstall.
 * HPOS and cart/checkout blocks compatible.
@@ -39,7 +38,7 @@ flag in the cart and on the order so you always know which lines are pre-orders.
 
 1. Upload the plugin to `/wp-content/plugins/preorder`, or install via Plugins → Add New.
 2. Activate it. WooCommerce must be active.
-3. Edit a product, open **Product data → General**, tick **Pre-order**, and optionally set a release date and button text.
+3. Edit a product, open **Product data → General**, and tick **Pre-order**.
 4. Adjust store-wide defaults under **WooCommerce → Pre-orders**.
 
 == Frequently Asked Questions ==
@@ -51,26 +50,19 @@ Yes. WooCommerce must be installed and active.
 = What happens when a product is marked as a pre-order? =
 
 It becomes purchasable even when out of stock, its add-to-cart button label
-changes, an optional release-date notice is shown, and the cart and order lines
-are flagged as pre-orders.
+changes, and the cart and order lines are flagged as pre-orders.
 
 = Can I pause pre-orders without editing every product? =
 
 Yes. Turn off the global toggle under **WooCommerce → Pre-orders** and flagged
 products behave like normal products until you turn it back on.
 
-= Does it work with variable products? =
-
-The release-date notice and button label apply at the product level. Cart and
-order flagging works for both simple products and variations of a pre-order
-product.
-
 == Screenshots ==
 
-1. The pre-order fields in the WooCommerce product editor.
+1. The pre-order field in the WooCommerce product editor.
 2. The WooCommerce → Pre-orders settings screen.
 
 == Changelog ==
 
 = 0.1.0 =
-* Initial release: per-product pre-order flag, release date, custom button text, out-of-stock purchasability, cart and order flagging, and a settings screen.
+* Initial release: per-product pre-order flag, custom button text, out-of-stock purchasability, and cart and order flagging, with a settings screen.

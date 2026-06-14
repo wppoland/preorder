@@ -12,10 +12,10 @@ use Preorder\Settings as SettingsStore;
 /**
  * Settings screen registered under WooCommerce → Pre-orders.
  *
- * Stores three values in the `preorder_settings` option: the global enable
- * toggle, the default add-to-cart button label, and whether to show the release
- * date on the storefront. All output is escaped, all input sanitised, the form
- * is nonce-protected and gated on the manage_woocommerce capability.
+ * Stores two values in the `preorder_settings` option: the global enable toggle
+ * and the default add-to-cart button label. All output is escaped, all input
+ * sanitised, the form is nonce-protected and gated on the manage_woocommerce
+ * capability.
  */
 final class Settings implements HasHooks
 {
@@ -91,7 +91,6 @@ final class Settings implements HasHooks
 
         $settings    = $this->store->all();
         $enabled     = (bool) ($settings['enabled'] ?? true);
-        $showDate    = (bool) ($settings['show_release_date'] ?? true);
         $buttonText  = (string) ($settings['default_button_text'] ?? '');
         $saved       = isset($_GET['preorder-saved']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only UI flag.
 
@@ -155,27 +154,6 @@ final class Settings implements HasHooks
                                 </p>
                             </td>
                         </tr>
-                        <tr>
-                            <th scope="row">
-                                <label for="preorder-show-date"><?php echo esc_html__('Show release date', 'preorder'); ?></label>
-                            </th>
-                            <td>
-                                <label class="preorder-toggle">
-                                    <input
-                                        type="checkbox"
-                                        id="preorder-show-date"
-                                        name="show_release_date"
-                                        value="1"
-                                        <?php checked($showDate); ?>
-                                        aria-describedby="preorder-show-date-help"
-                                    />
-                                    <?php echo esc_html__('Display the estimated release date to shoppers.', 'preorder'); ?>
-                                </label>
-                                <p class="description" id="preorder-show-date-help">
-                                    <?php echo esc_html__('Shows the per-product release date on the product page and in the cart, when one is set.', 'preorder'); ?>
-                                </p>
-                            </td>
-                        </tr>
                     </tbody>
                 </table>
 
@@ -200,7 +178,6 @@ final class Settings implements HasHooks
         $settings = [
             'enabled'             => isset($_POST['enabled']),
             'default_button_text' => $buttonText,
-            'show_release_date'   => isset($_POST['show_release_date']),
         ];
 
         update_option(SettingsStore::OPTION, $settings);

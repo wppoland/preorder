@@ -14,5 +14,4 @@ defined('ABSPATH') || exit;
 return [
     'enabled'             => true,
     'default_button_text' => 'Pre-order now',
-    'show_release_date'   => true,
 ];
