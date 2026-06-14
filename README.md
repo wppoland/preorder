@@ -1,45 +1,38 @@
 # Preorder - Pre-Orders for WooCommerce
 
 Let customers pre-order upcoming or out-of-stock WooCommerce products with a
-release date and a custom button label.
+release date and a custom add-to-cart button label.
 
-Mark any product as a pre-order from the product editor. It then stays
-purchasable while out of stock, gets a custom add-to-cart label, shows an
-optional release-date notice, and is flagged as a pre-order in the cart and on
+Mark any product as a pre-order from the product editor. It stays purchasable
+while out of stock, gets a custom button label, can show an estimated
+release-date notice, and is clearly flagged as a pre-order in the cart and on
 the order.
 
-## Features (free)
+## Features
 
-- Per-product pre-order flag (Product data → General).
-- Optional release date, shown as the estimated availability date.
-- Custom add-to-cart button label — global default plus per-product override.
+- Per-product pre-order flag, set under Product data → General.
+- Optional release date, shown to shoppers as the estimated availability date.
+- Custom add-to-cart button label, as a global default or per product.
 - Pre-order products stay purchasable while out of stock.
-- Cart, checkout and order lines flagged as pre-orders (cart item + order item meta).
-- A **WooCommerce → Pre-orders** settings screen (global on/off, default button text, show release date).
-- Escaped output, sanitised input, nonce-protected forms, `manage_woocommerce` admin gate.
-- Translation ready (POT included), clean uninstall, HPOS + cart/checkout blocks compatible.
+- Cart, checkout and order lines flagged as pre-orders.
+- A WooCommerce → Pre-orders settings screen for the global toggle, default button text and the release-date display.
 
-## Architecture
+## Installation
 
-- `preorder.php` — header, HPOS declaration, boots `Plugin::instance()->boot()` on `init:0`.
-- `Plugin::boot()` resolves services from a tiny DI `Container`, runs `Migrator`, registers hooks, then fires `do_action('preorder/booted', $plugin)` for PRO companions.
-- `src/Service/PreorderService.php` — storefront behaviour (purchasability, button text, release notice, cart/order flagging).
-- `src/Admin/ProductDataPanel.php` — product editor fields.
-- `src/Admin/Settings.php` — the WooCommerce submenu settings page.
+1. Upload the plugin to `/wp-content/plugins/preorder`, or install it via Plugins → Add New.
+2. Activate it. WooCommerce must be installed and active.
+3. Edit a product, open Product data → General, tick Pre-order, and optionally set a release date and button text.
+4. Adjust store-wide defaults under WooCommerce → Pre-orders.
 
-## Development
+## Frequently Asked Questions
 
-```bash
-composer install
-composer cs        # PHPCS (WordPress security ruleset)
-composer analyse   # PHPStan level 6
-```
+**Does it require WooCommerce?**
+Yes. WooCommerce must be installed and active.
 
-## PRO companion
+**Can I pause pre-orders without editing every product?**
+Yes. Turn off the global toggle under WooCommerce → Pre-orders and flagged
+products behave like normal products until you turn it back on.
 
-`wppoland/preorder-pro` (private) boots via `add_action('preorder/booted', …)`
-and adds premium features on top of this free plugin.
+Built by WPPoland — https://plogins.com
 
-## License
-
-GPL-2.0-or-later.
+License: GPL-2.0-or-later
