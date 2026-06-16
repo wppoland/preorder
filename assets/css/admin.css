@@ -1,27 +1,81 @@
 /**
  * Preorder — settings screen styling.
  *
- * Modern, dark-mode-aware, motion-safe. Scoped to the Pre-orders settings page
- * via .preorder-settings so it never leaks into the rest of wp-admin.
+ * Native wp-admin feel, raised a notch: real section cards, a family accent that
+ * matches the storefront (warm terracotta), and a live label preview. Scoped to
+ * .preorder-settings so nothing leaks into the rest of wp-admin. Dark-mode-aware,
+ * motion-safe, no JS framework.
+ *
+ * Accent contrast (computed, WCAG):
+ *   light  #8a4419 (storefront --preorder-accent-strong)
+ *            vs #fff      7.19:1  (AA/AAA text)
+ *            vs #f0f0f1   6.31:1  (AA text on the wp-admin body)
+ *   dark   #e8a572 (storefront dark accent)
+ *            vs #1e1e1e   7.98:1  (AA/AAA text)
+ *   Used for headings, the section rule and focus ring (UI, needs 3:1) — all pass.
  */
 
 .preorder-settings {
-	--preorder-accent: #2271b1;
+	--preorder-accent: #8a4419;
 	--preorder-fg: #1d2327;
 	--preorder-muted: #50575e;
 	--preorder-border: #dcdcde;
 	--preorder-card: #fff;
+	--preorder-surface: #f6efe8;
 }
 
 .preorder-settings .preorder-intro {
 	max-width: 46rem;
-	margin: 0.5rem 0 1.25rem;
+	margin: 0.5rem 0 1.5rem;
 	padding: 0.85rem 1rem;
 	border-left: 4px solid var(--preorder-accent);
 	background: var(--preorder-card);
 	border-radius: 4px;
 	color: var(--preorder-muted);
 	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.preorder-settings .preorder-section {
+	max-width: 46rem;
+	margin: 0 0 1.5rem;
+	padding: 0.25rem 1.25rem 0.75rem;
+	background: var(--preorder-card);
+	border: 1px solid var(--preorder-border);
+	border-radius: 6px;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.preorder-settings .preorder-section__title {
+	margin: 1rem 0 0.15rem;
+	padding: 0;
+	font-size: 1.05rem;
+	line-height: 1.3;
+	color: var(--preorder-fg);
+}
+
+.preorder-settings .preorder-section__title::before {
+	content: "";
+	display: inline-block;
+	width: 0.5rem;
+	height: 0.5rem;
+	margin-right: 0.55rem;
+	border-radius: 2px;
+	background: var(--preorder-accent);
+	vertical-align: middle;
+}
+
+.preorder-settings .preorder-section__lead {
+	margin: 0 0 0.25rem;
+	color: var(--preorder-muted);
+	font-size: 0.92rem;
+}
+
+.preorder-settings .form-table {
+	margin-top: 0.5rem;
+}
+
+.preorder-settings .form-table th {
+	width: 220px;
 }
 
 .preorder-settings .preorder-toggle {
@@ -32,18 +86,50 @@
 	color: var(--preorder-fg);
 }
 
-.preorder-settings .form-table th {
-	width: 220px;
+.preorder-settings .description {
+	max-width: 42rem;
+}
+
+.preorder-settings .description code {
+	background: var(--preorder-surface);
+	color: var(--preorder-accent);
+	padding: 0.05rem 0.4rem;
+	border-radius: 3px;
+	font-size: 0.9em;
+}
+
+/* Live preview of the storefront button label as the merchant types. */
+.preorder-settings .preorder-preview {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	margin: 0.6rem 0 0.2rem;
+}
+
+.preorder-settings .preorder-preview__label {
+	color: var(--preorder-muted);
+	font-size: 0.85rem;
+}
+
+.preorder-settings .preorder-preview__btn {
+	display: inline-block;
+	max-width: 22rem;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	padding: 0.4rem 0.95rem;
+	border-radius: 4px;
+	background: var(--preorder-accent);
+	color: #fff;
+	font-weight: 600;
+	font-size: 0.9rem;
+	line-height: 1.4;
 }
 
 .preorder-settings input[type="text"]:focus-visible,
 .preorder-settings input[type="checkbox"]:focus-visible {
 	outline: 2px solid var(--preorder-accent);
 	outline-offset: 2px;
-}
-
-.preorder-settings .description {
-	max-width: 42rem;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -54,13 +140,21 @@
 
 @media (prefers-color-scheme: dark) {
 	.preorder-settings {
+		--preorder-accent: #e8a572;
 		--preorder-fg: #e2e4e7;
 		--preorder-muted: #a7aaad;
 		--preorder-border: #3c434a;
 		--preorder-card: #1e1e1e;
+		--preorder-surface: #2a221c;
 	}
 
-	.preorder-settings .preorder-intro {
+	.preorder-settings .preorder-intro,
+	.preorder-settings .preorder-section {
 		box-shadow: none;
+	}
+
+	/* On dark cards the warm accent is light, so button text must be dark for AA. */
+	.preorder-settings .preorder-preview__btn {
+		color: #2a221c;
 	}
 }
