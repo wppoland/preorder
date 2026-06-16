@@ -46,6 +46,10 @@ final class PreorderService implements HasHooks
         add_filter('woocommerce_product_single_add_to_cart_text', [$this, 'filterButtonText'], 10, 2);
         add_filter('woocommerce_product_add_to_cart_text', [$this, 'filterButtonText'], 10, 2);
 
+        // Storefront: show the reservation stub on the single product page.
+        add_action('woocommerce_single_product_summary', [$this, 'renderStub'], 25);
+        add_action('wp_enqueue_scripts', [$this, 'enqueueAssets']);
+
         // Flag the cart item, surface it in the cart/checkout, and copy to the order.
         add_filter('woocommerce_add_cart_item_data', [$this, 'addCartItemData'], 10, 3);
         add_filter('woocommerce_get_item_data', [$this, 'displayCartItemData'], 10, 2);
@@ -109,6 +113,66 @@ final class PreorderService implements HasHooks
         }
 
         return $this->settings->defaultButtonText();
+    }
+
+    /**
+     * Enqueue the storefront stub assets only on a single pre-order product.
+     */
+    public function enqueueAssets(): void
+    {
+        if (! function_exists('is_product') || ! is_product()) {
+            return;
+        }
+
+        $product = wc_get_product(get_the_ID());
+        if (! $this->applies($product)) {
+            return;
+        }
+
+        wp_enqueue_style(
+            'preorder-storefront',
+            PREORDER_URL . 'assets/css/storefront.css',
+            [],
+            \Preorder\VERSION
+        );
+
+        wp_enqueue_script(
+            'preorder-storefront',
+            PREORDER_URL . 'assets/js/storefront.js',
+            [],
+            \Preorder\VERSION,
+            true
+        );
+    }
+
+    /**
+     * Render the reservation stub on the single product page.
+     *
+     * Presentation only: a paper claim-ticket that tells the shopper the item
+     * is inbound and they are holding a place in line. The cart behaviour is
+     * handled by the filters above and is unaffected by this output.
+     */
+    public function renderStub(): void
+    {
+        global $product;
+
+        if (! $this->applies($product)) {
+            return;
+        }
+
+        $title = __('Reserved as a pre-order', 'preorder');
+        $note  = __('Not in stock yet — your order holds a place in line and ships when it arrives.', 'preorder');
+
+        echo '<div class="preorder-stub" role="note">';
+        echo '<span class="preorder-stub__punch" aria-hidden="true"></span>';
+        echo '<span class="preorder-stub__label">';
+        echo '<span class="preorder-stub__title">';
+        echo '<span class="preorder-stub__eyelet" aria-hidden="true"></span>';
+        echo esc_html($title);
+        echo '</span>';
+        echo '<span class="preorder-stub__note">' . esc_html($note) . '</span>';
+        echo '</span>';
+        echo '</div>';
     }
 
     /**
