@@ -13,26 +13,30 @@ Let customers pre-order upcoming or out-of-stock WooCommerce products with a cus
 
 == Description ==
 
-Preorder lets you sell WooCommerce products before they are in stock. Mark any
-product as a pre-order from the product editor and it stays purchasable even when
-its stock status is out of stock — so shoppers can reserve upcoming releases or
-restocks instead of bouncing.
+Preorder lets you sell WooCommerce products before they are in stock. Tick a box
+on the product and it stays purchasable even when its stock status is out of
+stock, so a customer can reserve an upcoming release or a restock instead of
+landing on a dead "out of stock" page.
 
 On the storefront, pre-order products get a custom add-to-cart label (for example
-"Pre-order now") and a clear pre-order flag in the cart and on the order, so you
-always know which lines are pre-orders.
+"Pre-order now"), and each pre-order line is flagged in the cart and copied onto
+the order, so you can tell pre-orders apart when you pack and ship.
+
+The plugin is developed in the open. Source and bug reports:
+https://github.com/wppoland/preorder
 
 = Features =
 
-* Mark any product as a pre-order from **Product data → General**.
-* Custom add-to-cart button label for pre-order products.
-* Pre-order products stay purchasable while out of stock.
-* Cart and checkout show a clear pre-order line.
-* Order line items are flagged as pre-orders (order item meta) for fulfilment.
-* A **WooCommerce → Pre-orders** settings screen: global on/off and default button text.
-* Output escaped, input sanitised, forms nonce-protected, admin gated on manage_woocommerce.
-* Translation ready (POT included) and clean uninstall.
-* HPOS and cart/checkout blocks compatible.
+* A **Pre-order** checkbox on every product, under **Product data → General**.
+* A custom add-to-cart label for pre-order products, set store-wide.
+* Pre-order products stay purchasable while their stock status is out of stock.
+* The cart and checkout show a "Pre-order: Yes" row on each pre-order line.
+* That flag is copied onto the order line item, so it shows on the order screen and packing slips.
+* A **WooCommerce → Pre-orders** screen with a store-wide on/off switch and the default button text.
+* Pausing the on/off switch makes flagged products behave like normal products again, without editing each one.
+* Forms are nonce-checked and limited to users who can manage WooCommerce; output is escaped and input sanitised.
+* Ships with a translation template (preorder.pot) and a Polish translation; removing the plugin deletes its setting.
+* Works with WooCommerce HPOS and the cart and checkout blocks.
 
 == Installation ==
 
