@@ -81,6 +81,24 @@ final class Settings implements HasHooks
             [],
             \Preorder\VERSION,
         );
+
+        // Tiny vanilla mirror so merchants see the storefront button label as they
+        // type. No framework, no jQuery — registered on its own handle, deferred.
+        wp_register_script('preorder-admin', '', [], \Preorder\VERSION, true);
+        wp_enqueue_script('preorder-admin');
+
+        $preview = sprintf(
+            'document.addEventListener("DOMContentLoaded",function(){'
+            . 'var i=document.getElementById("preorder-button-text"),'
+            . 'p=document.getElementById("preorder-button-preview");'
+            . 'if(!i||!p)return;'
+            . 'var d=%s;'
+            . 'var sync=function(){p.textContent=(i.value.trim()||d);};'
+            . 'i.addEventListener("input",sync);sync();});',
+            wp_json_encode($this->store->defaultButtonText()),
+        );
+
+        wp_add_inline_script('preorder-admin', $preview);
     }
 
     public function renderPage(): void
@@ -89,10 +107,12 @@ final class Settings implements HasHooks
             return;
         }
 
-        $settings    = $this->store->all();
-        $enabled     = (bool) ($settings['enabled'] ?? true);
-        $buttonText  = (string) ($settings['default_button_text'] ?? '');
-        $saved       = isset($_GET['preorder-saved']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only UI flag.
+        $settings       = $this->store->all();
+        $enabled        = (bool) ($settings['enabled'] ?? true);
+        $buttonText     = (string) ($settings['default_button_text'] ?? '');
+        $defaultButton  = $this->store->defaultButtonText();
+        $previewLabel   = '' !== trim($buttonText) ? $buttonText : $defaultButton;
+        $saved          = isset($_GET['preorder-saved']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only UI flag.
 
         ?>
         <div class="wrap preorder-settings">
@@ -105,57 +125,86 @@ final class Settings implements HasHooks
             <?php endif; ?>
 
             <p class="preorder-intro">
-                <?php echo esc_html__('Mark individual products as pre-orders from the product editor (Product data → General). These options control the storefront defaults.', 'preorder'); ?>
+                <?php echo esc_html__('Flag any product as a pre-order from the product editor (Product data → General). The options here set the store-wide defaults that those products inherit.', 'preorder'); ?>
             </p>
 
             <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
                 <input type="hidden" name="action" value="<?php echo esc_attr(self::ACTION); ?>" />
                 <?php wp_nonce_field(self::NONCE); ?>
 
-                <table class="form-table" role="presentation">
-                    <tbody>
-                        <tr>
-                            <th scope="row">
-                                <label for="preorder-enabled"><?php echo esc_html__('Enable pre-orders', 'preorder'); ?></label>
-                            </th>
-                            <td>
-                                <label class="preorder-toggle">
+                <div class="preorder-section">
+                    <h2 class="preorder-section__title"><?php echo esc_html__('Storefront behaviour', 'preorder'); ?></h2>
+                    <p class="preorder-section__lead">
+                        <?php echo esc_html__('Controls whether the pre-order rules run on your live store.', 'preorder'); ?>
+                    </p>
+
+                    <table class="form-table" role="presentation">
+                        <tbody>
+                            <tr>
+                                <th scope="row">
+                                    <label for="preorder-enabled"><?php echo esc_html__('Enable pre-orders', 'preorder'); ?></label>
+                                </th>
+                                <td>
+                                    <label class="preorder-toggle">
+                                        <input
+                                            type="checkbox"
+                                            id="preorder-enabled"
+                                            name="enabled"
+                                            value="1"
+                                            <?php checked($enabled); ?>
+                                            aria-describedby="preorder-enabled-help"
+                                        />
+                                        <?php echo esc_html__('Apply pre-order behaviour on the storefront.', 'preorder'); ?>
+                                    </label>
+                                    <p class="description" id="preorder-enabled-help">
+                                        <?php echo esc_html__('Lets flagged products stay purchasable while out of stock and shows the pre-order button. Turn this off to pause every pre-order store-wide in one click — without un-flagging each product. Default: on.', 'preorder'); ?>
+                                    </p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="preorder-section">
+                    <h2 class="preorder-section__title"><?php echo esc_html__('Pre-order button', 'preorder'); ?></h2>
+                    <p class="preorder-section__lead">
+                        <?php echo esc_html__('The label shoppers see in place of the usual add-to-cart text.', 'preorder'); ?>
+                    </p>
+
+                    <table class="form-table" role="presentation">
+                        <tbody>
+                            <tr>
+                                <th scope="row">
+                                    <label for="preorder-button-text"><?php echo esc_html__('Default button text', 'preorder'); ?></label>
+                                </th>
+                                <td>
                                     <input
-                                        type="checkbox"
-                                        id="preorder-enabled"
-                                        name="enabled"
-                                        value="1"
-                                        <?php checked($enabled); ?>
-                                        aria-describedby="preorder-enabled-help"
+                                        type="text"
+                                        id="preorder-button-text"
+                                        name="default_button_text"
+                                        class="regular-text"
+                                        value="<?php echo esc_attr($buttonText); ?>"
+                                        placeholder="<?php echo esc_attr($defaultButton); ?>"
+                                        aria-describedby="preorder-button-text-help"
                                     />
-                                    <?php echo esc_html__('Apply pre-order behaviour on the storefront.', 'preorder'); ?>
-                                </label>
-                                <p class="description" id="preorder-enabled-help">
-                                    <?php echo esc_html__('When off, products flagged as pre-orders behave like normal products. Turn this off to pause pre-orders store-wide without editing each product.', 'preorder'); ?>
-                                </p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">
-                                <label for="preorder-button-text"><?php echo esc_html__('Default button text', 'preorder'); ?></label>
-                            </th>
-                            <td>
-                                <input
-                                    type="text"
-                                    id="preorder-button-text"
-                                    name="default_button_text"
-                                    class="regular-text"
-                                    value="<?php echo esc_attr($buttonText); ?>"
-                                    placeholder="<?php echo esc_attr__('Pre-order now', 'preorder'); ?>"
-                                    aria-describedby="preorder-button-text-help"
-                                />
-                                <p class="description" id="preorder-button-text-help">
-                                    <?php echo esc_html__('Add-to-cart label shown for pre-order products. Individual products can override this in the product editor.', 'preorder'); ?>
-                                </p>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                                    <p class="preorder-preview" aria-hidden="true">
+                                        <span class="preorder-preview__label"><?php echo esc_html__('Shoppers see:', 'preorder'); ?></span>
+                                        <span class="preorder-preview__btn" id="preorder-button-preview"><?php echo esc_html($previewLabel); ?></span>
+                                    </p>
+                                    <p class="description" id="preorder-button-text-help">
+                                        <?php
+                                        printf(
+                                            /* translators: %s: default button label, e.g. "Pre-order now". */
+                                            esc_html__('Replaces the add-to-cart label on pre-order products. Leave blank to use %s. Any single product can override this from its own editor.', 'preorder'),
+                                            '<code>' . esc_html($defaultButton) . '</code>',
+                                        );
+                                        ?>
+                                    </p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
                 <?php submit_button(__('Save changes', 'preorder')); ?>
             </form>
