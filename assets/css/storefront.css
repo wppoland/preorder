@@ -1,0 +1,143 @@
+/**
+ * Preorder — storefront.
+ *
+ * One surface, one moment: the single-product page, where a shopper commits to
+ * reserving an item that has not arrived yet. The component reads as a paper
+ * reservation stub — a claim ticket with a real perforated tear-edge — so the
+ * promise ("this is coming, you're holding a place in line") is legible at a
+ * glance instead of hidden inside a relabeled button.
+ *
+ * Themeable via --preorder-* tokens; every token falls back to a sensible
+ * default so the stub inherits a theme's surface/ink where one is provided.
+ * Zero layout shift, no jQuery, prefers-reduced-motion + dark-scheme aware.
+ */
+
+.preorder-stub {
+	/* Reserved-ink amber: a stamped claim-ticket tone, never default blue. */
+	--preorder-ink: var(--preorder-accent, #b4612a);
+	--preorder-ink-strong: var(--preorder-accent-strong, #8a4419);
+	--preorder-paper: var(--preorder-surface, #fffaf3);
+	--preorder-paper-edge: var(--preorder-surface-edge, #f3e7d6);
+	--preorder-text: var(--preorder-text-color, #4a3527);
+	/* The hole reads as the page showing through a punched stub. */
+	--preorder-hole: var(--preorder-hole-color, #ece1d0);
+	--preorder-hole-edge: var(--preorder-hole-edge-color, #d8c6ad);
+
+	/* The perforated gutter width — also where the punch animation lives. */
+	--preorder-perf: 22px;
+
+	position: relative;
+	display: flex;
+	align-items: center;
+	gap: 0.85rem;
+	max-width: 30rem;
+	margin: 0 0 1.25rem;
+	padding: 0.85rem 1rem 0.85rem calc(var(--preorder-perf) + 0.9rem);
+	font-family: inherit;
+	color: var(--preorder-text);
+	background: var(--preorder-paper);
+	border: 1px solid var(--preorder-paper-edge);
+	border-radius: 10px;
+	/* A faint slip-of-paper lift, not a heavy card. */
+	box-shadow: 0 1px 0 rgba(74, 53, 39, 0.04), 0 6px 18px -12px rgba(74, 53, 39, 0.35);
+}
+
+/* The perforated tear-edge: a column of punched holes down the left gutter,
+   each ringed so it reads as a real punch even on a pale paper. */
+.preorder-stub::before {
+	content: "";
+	position: absolute;
+	inset: 4px auto 4px 0;
+	width: var(--preorder-perf);
+	background:
+		radial-gradient(circle at center,
+			var(--preorder-hole) 0 3.4px,
+			var(--preorder-hole-edge) 3.4px 4.4px,
+			transparent 4.8px) 50% 7px / 100% 14px repeat-y;
+	border-right: 1px dashed var(--preorder-hole-edge);
+}
+
+/* The validation mark: a single stamped dot the ink "punches" through. */
+.preorder-stub__punch {
+	position: absolute;
+	left: calc(var(--preorder-perf) / 2);
+	top: 50%;
+	width: 7px;
+	height: 7px;
+	margin: -3.5px 0 0 -3.5px;
+	border-radius: 50%;
+	background: var(--preorder-ink);
+	opacity: 0;
+	transform: scale(0.2);
+}
+
+.preorder-stub__label {
+	display: flex;
+	flex-direction: column;
+	gap: 0.1rem;
+	line-height: 1.3;
+}
+
+.preorder-stub__title {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	font-weight: 700;
+	font-size: 0.95rem;
+	letter-spacing: 0.01em;
+	color: var(--preorder-ink-strong);
+}
+
+/* The ticket eyelet beside the title — reads as a hole-punch on the stub. */
+.preorder-stub__eyelet {
+	width: 0.62em;
+	height: 0.62em;
+	border: 2px solid var(--preorder-ink);
+	border-radius: 50%;
+	flex: none;
+}
+
+.preorder-stub__note {
+	font-size: 0.82rem;
+	color: var(--preorder-text);
+	opacity: 0.85;
+}
+
+/* The punch settle: a single validate-stamp when the stub enters or commits.
+   One earned micro-interaction; everything else holds still. */
+@keyframes preorder-punch {
+	0%   { opacity: 0; transform: scale(0.2); }
+	45%  { opacity: 1; transform: scale(1.35); }
+	100% { opacity: 0.9; transform: scale(1); }
+}
+
+.preorder-stub.is-validated .preorder-stub__punch {
+	animation: preorder-punch 460ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Dark scheme: same ink world, inked-paper turns to a dim kraft slip. */
+@media (prefers-color-scheme: dark) {
+	.preorder-stub {
+		--preorder-ink: var(--preorder-accent, #e8a572);
+		--preorder-ink-strong: var(--preorder-accent-strong, #f0b888);
+		--preorder-paper: var(--preorder-surface, #2a221c);
+		--preorder-paper-edge: var(--preorder-surface-edge, #46382d);
+		--preorder-text: var(--preorder-text-color, #d8c9bb);
+		--preorder-hole: var(--preorder-hole-color, #15110d);
+		--preorder-hole-edge: var(--preorder-hole-edge-color, #5a4a3a);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.preorder-stub.is-validated .preorder-stub__punch {
+		animation: none;
+		opacity: 0.9;
+		transform: scale(1);
+	}
+}
+
+@media (max-width: 480px) {
+	.preorder-stub {
+		max-width: none;
+	}
+}
