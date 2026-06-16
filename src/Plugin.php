@@ -47,5 +47,15 @@ final class Plugin
                 $service->registerHooks();
             }
         }
+
+        /**
+         * Fires after the plugin has fully booted and registered its services.
+         *
+         * Add-ons (e.g. Preorder Pro) listen here to extend the shared DI
+         * container and register their own hooks.
+         *
+         * @param Plugin $plugin The booted plugin instance.
+         */
+        do_action('preorder/booted', $this);
     }
 }
