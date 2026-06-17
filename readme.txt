@@ -74,6 +74,16 @@ Cart and order line items are flagged so you and the customer can see which line
 1. The pre-order field in the WooCommerce product editor.
 2. The WooCommerce → Pre-orders settings screen.
 
+== External Services ==
+
+Preorder does not connect to any external services. It makes no outbound HTTP
+requests, loads no remote scripts, fonts, or analytics, and sends no data off
+your site. Everything runs on your own WordPress install: the store-wide button
+text and on/off switch live in the `preorder_settings` option, the per-product
+flag is stored as the `_preorder_enabled` product meta, and each pre-order order
+line carries a "Pre-order: Yes" line item meta value. No email is sent by the
+plugin.
+
 == Changelog ==
 
 = 0.1.0 =
