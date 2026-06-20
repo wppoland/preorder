@@ -17,7 +17,8 @@ defined('ABSPATH') || exit;
  */
 final class ProductMeta
 {
-    public const META_ENABLED = '_preorder_enabled';
+    public const META_ENABLED      = '_preorder_enabled';
+    public const META_RELEASE_DATE = '_preorder_release_date';
 
     /**
      * Whether the product (or variation) is flagged as a pre-order.
@@ -62,6 +63,56 @@ final class ProductMeta
         }
 
         return false;
+    }
+
+    /**
+     * Expected release date for a pre-order product or variation (Y-m-d), or empty.
+     *
+     * Variations with their own date override the parent. Add-ons filter
+     * `preorder/release_date` to extend or override the result.
+     */
+    public function releaseDate(\WC_Product $product): string
+    {
+        $date = $this->resolveReleaseDate($product);
+
+        /**
+         * Filter the expected release date for a pre-order product or variation.
+         *
+         * @param string      $date    Release date in Y-m-d format, or empty.
+         * @param \WC_Product $product The product or variation being checked.
+         */
+        return (string) apply_filters('preorder/release_date', $date, $product);
+    }
+
+    private function resolveReleaseDate(\WC_Product $product): string
+    {
+        if ($product->is_type('variation')) {
+            if ($product->meta_exists(self::META_RELEASE_DATE)) {
+                return $this->sanitizeDate((string) $product->get_meta(self::META_RELEASE_DATE));
+            }
+
+            $parent = wc_get_product($product->get_parent_id());
+            if ($parent instanceof \WC_Product) {
+                return $this->resolveReleaseDate($parent);
+            }
+
+            return '';
+        }
+
+        return $this->sanitizeDate((string) $product->get_meta(self::META_RELEASE_DATE));
+    }
+
+    private function sanitizeDate(string $raw): string
+    {
+        $raw = trim($raw);
+
+        if ('' === $raw) {
+            return '';
+        }
+
+        $date = \DateTimeImmutable::createFromFormat('Y-m-d', $raw);
+
+        return $date instanceof \DateTimeImmutable ? $date->format('Y-m-d') : '';
     }
 
     private function resolveEnabled(\WC_Product $product): bool

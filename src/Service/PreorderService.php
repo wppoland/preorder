@@ -23,7 +23,8 @@ use Preorder\Settings;
  */
 final class PreorderService implements HasHooks
 {
-    private const CART_FLAG = 'preorder_is_preorder';
+    private const CART_FLAG     = 'preorder_is_preorder';
+    private const ORDER_LINE_KEY = '_preorder_line';
 
     public function __construct(
         private readonly Settings $settings,
@@ -174,6 +175,7 @@ final class PreorderService implements HasHooks
         $visible = $this->applies($product);
         $title   = __('Reserved as a pre-order', 'preorder');
         $note    = __('Not in stock yet — your order holds a place in line and ships when it arrives.', 'preorder');
+        $release = $visible ? $this->meta->releaseDate($product) : '';
 
         printf(
             '<div class="preorder-stub%1$s" role="note"%2$s>',
@@ -187,6 +189,15 @@ final class PreorderService implements HasHooks
         echo esc_html($title);
         echo '</span>';
         echo '<span class="preorder-stub__note">' . esc_html($note) . '</span>';
+        if ('' !== $release) {
+            echo '<span class="preorder-stub__release">';
+            printf(
+                /* translators: %s: formatted release date */
+                esc_html__('Expected release: %s', 'preorder'),
+                esc_html(wp_date(get_option('date_format'), strtotime($release . ' 12:00:00'))),
+            );
+            echo '</span>';
+        }
         echo '</span>';
         echo '</div>';
     }
@@ -203,8 +214,9 @@ final class PreorderService implements HasHooks
 
         $isPreorder = $this->applies($variation);
 
-        $data['preorder_is_preorder']     = $isPreorder;
+        $data['preorder_is_preorder']      = $isPreorder;
         $data['preorder_add_to_cart_text'] = $isPreorder ? $this->settings->defaultButtonText() : '';
+        $data['preorder_release_date']     = $isPreorder ? $this->meta->releaseDate($variation) : '';
 
         return $data;
     }
@@ -266,5 +278,6 @@ final class PreorderService implements HasHooks
         }
 
         $item->add_meta_data(__('Pre-order', 'preorder'), __('Yes', 'preorder'), true);
+        $item->add_meta_data(self::ORDER_LINE_KEY, 'yes', true);
     }
 }

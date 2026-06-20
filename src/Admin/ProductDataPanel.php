@@ -33,7 +33,32 @@ final class ProductDataPanel implements HasHooks
             'description' => __('Sell this product as a pre-order. It stays purchasable even when out of stock.', 'preorder'),
         ]);
 
+        woocommerce_wp_text_input([
+            'id'          => ProductMeta::META_RELEASE_DATE,
+            'label'       => __('Expected release date', 'preorder'),
+            'description' => __('Optional. Shown on the product page and used by add-ons for release notifications.', 'preorder'),
+            'type'        => 'date',
+            'value'       => $this->releaseDateValue(),
+        ]);
+
         echo '</div>';
+    }
+
+    private function releaseDateValue(): string
+    {
+        global $post;
+
+        if (! $post instanceof \WP_Post) {
+            return '';
+        }
+
+        $product = wc_get_product($post->ID);
+
+        if (! $product instanceof \WC_Product) {
+            return '';
+        }
+
+        return (new \Preorder\ProductMeta())->releaseDate($product);
     }
 
     public function saveFields(\WC_Product $product): void
@@ -49,5 +74,19 @@ final class ProductDataPanel implements HasHooks
 
         $enabled = isset($_POST[ProductMeta::META_ENABLED]) ? 'yes' : '';
         $product->update_meta_data(ProductMeta::META_ENABLED, $enabled);
+
+        $releaseDate = isset($_POST[ProductMeta::META_RELEASE_DATE])
+            ? sanitize_text_field(wp_unslash((string) $_POST[ProductMeta::META_RELEASE_DATE]))
+            : '';
+
+        if ('' !== $releaseDate && ! preg_match('/^\d{4}-\d{2}-\d{2}$/', $releaseDate)) {
+            $releaseDate = '';
+        }
+
+        if ('' === $releaseDate) {
+            $product->delete_meta_data(ProductMeta::META_RELEASE_DATE);
+        } else {
+            $product->update_meta_data(ProductMeta::META_RELEASE_DATE, $releaseDate);
+        }
     }
 }

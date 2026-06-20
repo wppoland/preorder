@@ -4,7 +4,7 @@ Tags: woocommerce, preorder, pre-order, backorder, out of stock
 Requires at least: 6.5
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 0.1.1
+Stable tag: 0.1.2
 Requires Plugins: woocommerce
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -91,6 +91,11 @@ line carries a "Pre-order: Yes" line item meta value. No email is sent by the
 plugin.
 
 == Changelog ==
+
+= 0.1.2 =
+* Expected release date field on products (`ProductMeta::META_RELEASE_DATE`, `preorder/release_date` filter).
+* Release date shown on the storefront pre-order stub and in variation JSON.
+* Hidden `_preorder_line` order item meta for add-on queries.
 
 = 0.1.1 =
 * Add `preorder/is_preorder` filter and variation inheritance in `ProductMeta`.

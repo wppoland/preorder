@@ -3,7 +3,7 @@
  * Plugin Name:       Preorder - Pre-Orders for WooCommerce
  * Plugin URI:        https://plogins.com/preorder/
  * Description:        Let customers pre-order upcoming or out-of-stock WooCommerce products with a custom add-to-cart button.
- * Version:           0.1.1
+ * Version:           0.1.2
  * Requires at least: 6.5
  * Requires PHP:      8.1
  * Requires Plugins:  woocommerce
@@ -24,7 +24,7 @@ namespace Preorder;
 
 defined('ABSPATH') || exit;
 
-const VERSION     = '0.1.1';
+const VERSION     = '0.1.2';
 const PLUGIN_FILE = __FILE__;
 
 define('PREORDER_DIR', plugin_dir_path(__FILE__));
