@@ -4,7 +4,7 @@ includes:
 parameters:
     level: 6
     paths:
-        - preorder.php
+        - plogins-preorder.php
         - uninstall.php
         - src
         - config

@@ -1,10 +1,10 @@
-=== Preorder - Pre-Orders for WooCommerce ===
+=== Plogins Preorder for WooCommerce ===
 Contributors: motylanogha
 Tags: woocommerce, preorder, pre-order, backorder, out of stock
 Requires at least: 6.5
 Tested up to: 7.0
 Requires PHP: 8.1
-Stable tag: 0.1.2
+Stable tag: 0.1.3
 Requires Plugins: woocommerce
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -24,11 +24,10 @@ the order, so you can tell pre-orders apart when you pack and ship.
 
 = Documentation and links =
 
-* **Documentation** - https://plogins.com/preorder/docs/
-* **Plugin page** - https://plogins.com/preorder/
-* **Source code** - https://github.com/wppoland/preorder
-* **Bug reports and feature requests** - https://github.com/wppoland/preorder/issues
-* **Discussions and questions** - https://github.com/wppoland/preorder/discussions
+* **Documentation** - https://plogins.com/plogins-preorder/docs/
+* **Plugin page** - https://plogins.com/plogins-preorder/
+* **Source code** - https://github.com/wppoland/plogins-preorder
+* **Bug reports and feature requests** - https://github.com/wppoland/plogins-preorder/issues
 
 
 = Features =
@@ -41,7 +40,7 @@ the order, so you can tell pre-orders apart when you pack and ship.
 * A **WooCommerce → Pre-orders** screen with a store-wide on/off switch and the default button text.
 * Pausing the on/off switch makes flagged products behave like normal products again, without editing each one.
 * Forms are nonce-checked and limited to users who can manage WooCommerce; output is escaped and input sanitised.
-* Ships with a translation template (preorder.pot) and a Polish translation; removing the plugin deletes its setting.
+* Ships with a translation template (plogins-preorder.pot) and a Polish translation; removing the plugin deletes its setting.
 * Works with WooCommerce HPOS and the cart and checkout blocks.
 
 == Installation ==
@@ -91,6 +90,9 @@ line carries a "Pre-order: Yes" line item meta value. No email is sent by the
 plugin.
 
 == Changelog ==
+
+= 0.1.3 =
+* Renamed to Plogins Preorder for WooCommerce for a more distinctive plugin name.
 
 = 0.1.2 =
 * Expected release date field on products (`ProductMeta::META_RELEASE_DATE`, `preorder/release_date` filter).

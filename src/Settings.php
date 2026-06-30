@@ -47,7 +47,7 @@ final class Settings
         $text = (string) ($this->all()['default_button_text'] ?? '');
         $text = trim($text);
 
-        return '' !== $text ? $text : __('Pre-order now', 'preorder');
+        return '' !== $text ? $text : __('Pre-order now', 'plogins-preorder');
     }
 
     /**

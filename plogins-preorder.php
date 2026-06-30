@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name:       Preorder - Pre-Orders for WooCommerce
- * Plugin URI:        https://plogins.com/preorder/
+ * Plugin Name:       Plogins Preorder for WooCommerce
+ * Plugin URI:        https://plogins.com/plogins-preorder/
  * Description:        Let customers pre-order upcoming or out-of-stock WooCommerce products with a custom add-to-cart button.
- * Version:           0.1.2
+ * Version:           0.1.3
  * Requires at least: 6.5
  * Requires PHP:      8.1
  * Requires Plugins:  woocommerce
@@ -11,7 +11,7 @@
  * Author URI:        https://wppoland.com
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       preorder
+ * Text Domain:       plogins-preorder
  * Domain Path:       /languages
  * WC requires at least: 8.0
  *
@@ -24,7 +24,7 @@ namespace Preorder;
 
 defined('ABSPATH') || exit;
 
-const VERSION     = '0.1.2';
+const VERSION     = '0.1.3';
 const PLUGIN_FILE = __FILE__;
 
 define('PREORDER_DIR', plugin_dir_path(__FILE__));
@@ -44,7 +44,7 @@ add_action('plugins_loaded', static function (): void {
     if (! class_exists('WooCommerce')) {
         add_action('admin_notices', static function (): void {
             echo '<div class="notice notice-error"><p>';
-            echo esc_html__('Preorder - Pre-Orders for WooCommerce requires WooCommerce to be active.', 'preorder');
+            echo esc_html__('Preorder - Pre-Orders for WooCommerce requires WooCommerce to be active.', 'plogins-preorder');
             echo '</p></div>';
         });
         return;
